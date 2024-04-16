@@ -1,7 +1,6 @@
 import requests
 import logging as logger
-import pytest
-import random
+import uuid
 
 Endpoint = "https://todo.pixegami.io/"
 
@@ -11,9 +10,12 @@ def test_get_endpoint():
     logger.debug("the response is {}".format(response.json()))
     assert response.status_code==200
 def create_payload():
+    user_id = f"test_user_{uuid.uuid4().hex}"
+    content = f"test_content_{uuid.uuid4().hex}"
+
     payload = {
-        "content": "string",
-        "user_id": "string",
+        "content": content,
+        "user_id": user_id,
         "is_done": False
     }
     return payload
@@ -23,19 +25,16 @@ def get_task(task_id):
     return requests.get(Endpoint+ f"/get-task/{task_id}")
 def update_task(payload):
     return requests.put(Endpoint + "/update-task", json=payload)
-
-# def test_can_create_task():
-#     payload = create_payload()
-#     response = requests.put(Endpoint+"/create-task",json=payload)
-#     assert response.status_code == 200
-#     create_task_response = response.json()
-#     task_id = create_task_response["task"]["task_id"]
-#     print(create_task_response)
-#     response = requests.get(Endpoint+ f"/get-task/{task_id}")
-#     getTaskResponse = response.json()
-#     print ("response from get task id {}".format(getTaskResponse))
-#     assert task_id ==getTaskResponse["task_id"]
-
+def delete_task(task_id):
+   return requests.delete(Endpoint+f"/delete-task/{task_id}")
+def get_list_task(user_id):
+    return requests.get(Endpoint+f"/list-tasks/{user_id}")
+def test_create_multiple_user():
+    n= 3
+    for _ in range(n):
+        payload= create_payload()
+        create_task_response = create_task(payload)
+        assert create_task_response.status_code == 200
 
 
 def test_can_update_task():
@@ -58,3 +57,14 @@ def test_can_update_task():
     print(Updated_task.json()['task_id'])
 
 
+# def test_can_create_task():
+#     payload = create_payload()
+#     response = requests.put(Endpoint+"/create-task",json=payload)
+#     assert response.status_code == 200
+#     create_task_response = response.json()
+#     task_id = create_task_response["task"]["task_id"]
+#     print(create_task_response)
+#     response = requests.get(Endpoint+ f"/get-task/{task_id}")
+#     getTaskResponse = response.json()
+#     print ("response from get task id {}".format(getTaskResponse))
+#     assert task_id ==getTaskResponse["task_id"]
