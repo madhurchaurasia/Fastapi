@@ -2,11 +2,8 @@ import requests
 import logging as logger
 import uuid
 
+# All Utilities #
 Endpoint = "https://todo.pixegami.io/"
-
-
-
-
 def create_payload():
     user_id = f"test_user_{uuid.uuid4().hex}"
     content = f"test_content_{uuid.uuid4().hex}"
@@ -28,6 +25,7 @@ def delete_task(task_id):
 def get_list_task(user_id):
     return requests.get(Endpoint+f"/list-tasks/{user_id}")
 
+# Test Methods #
 def test_get_endpoint():
     response = requests.get(Endpoint)
     logger.debug("the response is {}".format(response.json()))
