@@ -5,10 +5,8 @@ import uuid
 Endpoint = "https://todo.pixegami.io/"
 
 
-def test_get_endpoint():
-    response = requests.get(Endpoint)
-    logger.debug("the response is {}".format(response.json()))
-    assert response.status_code==200
+
+
 def create_payload():
     user_id = f"test_user_{uuid.uuid4().hex}"
     content = f"test_content_{uuid.uuid4().hex}"
@@ -29,6 +27,11 @@ def delete_task(task_id):
    return requests.delete(Endpoint+f"/delete-task/{task_id}")
 def get_list_task(user_id):
     return requests.get(Endpoint+f"/list-tasks/{user_id}")
+
+def test_get_endpoint():
+    response = requests.get(Endpoint)
+    logger.debug("the response is {}".format(response.json()))
+    assert response.status_code==200
 def test_create_multiple_user():
     n= 3
     for _ in range(n):
